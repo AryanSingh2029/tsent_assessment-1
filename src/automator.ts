@@ -2,46 +2,58 @@ import { chromium } from "playwright";
 import { sampleProfile } from "./profile";
 import type { ApplicationResult, UserProfile } from "./types";
 
-/**
- * ============================================================
- * TSENTA TAKE-HOME ASSESSMENT - ATS Form Automator
- * ============================================================
- *
- * Your task: Build an automation system that can fill out job
- * application forms across MULTIPLE ATS platforms using Playwright.
- *
- * There are two mock forms to automate:
- *
- *   1. Acme Corp    → http://localhost:3939/acme.html
- *      Multi-step form with progress bar, typeahead, checkboxes,
- *      radio buttons, conditional fields, file upload
- *
- *   2. Globex Corp  → http://localhost:3939/globex.html
- *      Single-page accordion form with toggle switches, chip
- *      selectors, salary slider, datalist, different selectors
- *
- * Your code should handle BOTH forms with a shared architecture.
- * Read the README for full instructions and evaluation criteria.
- */
+import { ATS_REGISTRY } from "./ats/registry";
 
 const BASE_URL = "http://localhost:3939";
 
-async function applyToJob(
-  url: string,
-  profile: UserProfile
-): Promise<ApplicationResult> {
+async function applyToJob(url: string, profile: UserProfile): Promise<ApplicationResult> {
   const startTime = Date.now();
 
-  // TODO: Implement your automation here
-  //
-  // Think about:
-  //   - How do you detect which ATS/form you're on?
-  //   - How do you share logic for common field types (text, dropdown, file upload)
-  //     while handling platform-specific differences (typeahead vs datalist,
-  //     checkboxes vs chips, radio buttons vs toggles)?
-  //   - How would a third ATS be added without rewriting everything?
+  const browser = await chromium.launch({ headless: false });
+  const context = await browser.newContext();
+  const page = await context.newPage();
 
-  throw new Error("Not implemented — this is your task!");
+  try {
+    await page.goto(url, { waitUntil: "domcontentloaded" });
+
+    // Pick adapter
+    const adapter = await findAdapter(page);
+    if (!adapter) {
+      return {
+        success: false,
+        error: `No ATS adapter found for url=${url}`,
+        durationMs: Date.now() - startTime,
+      };
+    }
+
+    const result = await adapter.apply(page, profile);
+
+    // Ensure durationMs is always set correctly
+    return {
+      ...result,
+      durationMs: Date.now() - startTime,
+    };
+  } catch (err: any) {
+    return {
+      success: false,
+      error: err?.message ?? String(err),
+      durationMs: Date.now() - startTime,
+    };
+  } finally {
+    await context.close().catch(() => {});
+    await browser.close().catch(() => {});
+  }
+}
+
+async function findAdapter(page: import("playwright").Page) {
+  for (const adapter of ATS_REGISTRY) {
+    try {
+      if (await adapter.canHandle(page)) return adapter;
+    } catch {
+      // ignore adapter detection errors
+    }
+  }
+  return null;
 }
 
 // ── Entry point ──────────────────────────────────────────────
@@ -49,6 +61,8 @@ async function main() {
   const targets = [
     { name: "Acme Corp", url: `${BASE_URL}/acme.html` },
     { name: "Globex Corporation", url: `${BASE_URL}/globex.html` },
+    { name: "Tsent (YC-style)", url: `${BASE_URL}/ycombinator.html` },
+    { name: "Dropr ATS", url: `${BASE_URL}/dropr.html` },
   ];
 
   for (const target of targets) {

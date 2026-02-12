@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Tsent — Start a Conversation</title>
+  <style>
+    :root{
+      --bg:#f3f4f6;
+      --card:#ffffff;
+      --text:#111827;
+      --muted:#6b7280;
+      --border:#e5e7eb;
+      --accent:#f97316; /* orange */
+      --danger:#dc2626;
+      --warn:#f59e0b;
+      --shadow:0 18px 60px rgba(0,0,0,.18);
+      --radius:14px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding: 28px;
+    }
+
+    /* page chrome */
+    .page {
+      width: 100%;
+      max-width: 980px;
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+      align-items:center;
+    }
+    .page h1{margin:0;font-size:20px}
+    .page p{margin:0;color:var(--muted);text-align:center}
+    .open-btn{
+      border:0;
+      background: #111827;
+      color: #fff;
+      padding: 12px 16px;
+      border-radius: 10px;
+      cursor:pointer;
+      font-weight:600;
+    }
+    .open-btn:hover{opacity:.92}
+
+    /* modal */
+    .backdrop{
+      position: fixed;
+      inset: 0;
+      background: rgba(17,24,39,.55);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding: 22px;
+    }
+    .backdrop.open{display:flex}
+
+    .modal{
+      width: 100%;
+      max-width: 660px;
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      border: 1px solid rgba(0,0,0,.06);
+    }
+    .modal-inner{padding: 18px 18px 16px}
+
+    .header{
+      display:flex;
+      align-items:center;
+      gap: 14px;
+    }
+    .avatar{
+      width: 44px;
+      height: 44px;
+      border-radius: 999px;
+      background: linear-gradient(135deg,#c7d2fe,#e0e7ff);
+      border: 1px solid var(--border);
+      overflow:hidden;
+      flex: 0 0 auto;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:700;
+      color:#111827;
+    }
+    .title-wrap{min-width:0}
+    .title{
+      font-weight: 750;
+      font-size: 18px;
+      line-height: 1.2;
+      margin: 0;
+    }
+    .divider{
+      height:1px;
+      background: var(--border);
+      margin: 14px 0;
+    }
+    .sub{
+      margin: 0 0 12px 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    textarea{
+      width: 100%;
+      min-height: 150px;
+      resize: vertical;
+      border-radius: 10px;
+      border: 2px solid #93c5fd; /* blue focus border look */
+      outline: none;
+      padding: 12px 12px;
+      font-size: 14px;
+      line-height: 1.4;
+      font-family: inherit;
+    }
+    textarea:focus{border-color:#60a5fa}
+
+    .note{
+      margin-top: 10px;
+      color: #b45309; /* warm */
+      font-size: 13px;
+      line-height: 1.4;
+    }
+
+    .error{
+      margin-top: 10px;
+      color: var(--danger);
+      font-size: 13px;
+      display:none;
+      font-weight: 600;
+    }
+    .error.show{display:block}
+
+    .actions{
+      display:flex;
+      justify-content:flex-end;
+      gap: 10px;
+      padding: 14px 18px 18px;
+      background: #fff;
+    }
+    .btn{
+      padding: 10px 14px;
+      border-radius: 10px;
+      cursor:pointer;
+      font-weight: 650;
+      border: 1px solid var(--border);
+      background: #fff;
+    }
+    .btn:hover{background:#f9fafb}
+    .btn-primary{
+      border-color: transparent;
+      background: var(--accent);
+      color:#fff;
+    }
+    .btn-primary:hover{opacity:.92}
+    .btn-primary:disabled{
+      opacity:.55;
+      cursor:not-allowed;
+    }
+
+    /* confirmation view */
+    .confirm{
+      display:none;
+      padding: 18px;
+    }
+    .confirm.show{display:block}
+    .confirm h2{margin:0 0 6px 0;font-size:18px}
+    .confirm p{margin:0;color:var(--muted);font-size:13px}
+    .ref{
+      margin-top: 12px;
+      display:inline-block;
+      padding: 10px 12px;
+      border-radius: 10px;
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      font-weight: 700;
+      color: #9a3412;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <h1>Tsent — YC-style outreach mock</h1>
+    <p>Click the button to open the “Start a conversation” modal.</p>
+    <button class="open-btn" id="openModal">Start a conversation</button>
+  </div>
+
+  <div class="backdrop" id="backdrop" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <div class="modal-inner" id="formView">
+        <div class="header">
+          <div class="avatar" aria-label="Avatar">TS</div>
+          <div class="title-wrap">
+            <p class="title" id="modal-title">Reach out to Tsenta Team</p>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <p class="sub">
+          Start a conversation with the team at Tsenta. Share something about you,
+          what you're looking for, or why Tsenta interests you. Human-written messages are
+          more likely to get a response.
+        </p>
+
+        <textarea
+          id="message"
+          placeholder="Hi! My name is Aryan Singh and here's a little bit about me and what I'm looking for..."
+        ></textarea>
+
+        <p class="note" id="note">
+          <strong>Note:</strong> It looks to us like your qualifications might match this job.
+          We recommend double-checking the qualifications and using your best judgement about whether it makes sense to apply anyway.
+        </p>
+
+        <div class="divider"></div>
+
+        <div class="error" id="errorText">Please write at least 50 characters.</div>
+      </div>
+
+      <div class="confirm" id="confirmView">
+        <h2>Message sent!</h2>
+        <p>Your outreach has been recorded for review.</p>
+        <div class="ref" id="tsent-ref">TS-000000</div>
+      </div>
+
+      <div class="actions">
+        <button class="btn" id="closeBtn" type="button">Close</button>
+        <button class="btn btn-primary" id="sendBtn" type="button">Send</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const openModal = document.getElementById("openModal");
+    const backdrop = document.getElementById("backdrop");
+    const closeBtn = document.getElementById("closeBtn");
+    const sendBtn = document.getElementById("sendBtn");
+    const message = document.getElementById("message");
+    const errorText = document.getElementById("errorText");
+
+    const formView = document.getElementById("formView");
+    const confirmView = document.getElementById("confirmView");
+    const refEl = document.getElementById("tsent-ref");
+
+    function showModal() {
+      backdrop.classList.add("open");
+      backdrop.setAttribute("aria-hidden", "false");
+      // reset view
+      formView.style.display = "block";
+      confirmView.classList.remove("show");
+      errorText.classList.remove("show");
+      sendBtn.disabled = false;
+      sendBtn.textContent = "Send";
+      setTimeout(() => message.focus(), 50);
+    }
+
+    function hideModal() {
+      backdrop.classList.remove("open");
+      backdrop.setAttribute("aria-hidden", "true");
+    }
+
+    function validMessage() {
+      return (message.value || "").trim().length >= 50;
+    }
+
+    function generateRef() {
+      return "TS-" + Date.now().toString(36).toUpperCase() + "-" + Math.random().toString(36).slice(2, 5).toUpperCase();
+    }
+
+    openModal.addEventListener("click", showModal);
+    closeBtn.addEventListener("click", hideModal);
+
+    backdrop.addEventListener("click", (e) => {
+      if (e.target === backdrop) hideModal();
+    });
+
+    message.addEventListener("input", () => {
+      if (validMessage()) errorText.classList.remove("show");
+    });
+
+    sendBtn.addEventListener("click", () => {
+      if (!validMessage()) {
+        errorText.classList.add("show");
+        return;
+      }
+
+      sendBtn.disabled = true;
+      sendBtn.textContent = "Sending...";
+
+      setTimeout(() => {
+        const ref = generateRef();
+        refEl.textContent = ref;
+
+        formView.style.display = "none";
+        confirmView.classList.add("show");
+      }, 900);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dropr ATS — Application</title>
+  <link rel="stylesheet" href="dropr.css" />
+</head>
+<body>
+  <div class="app-container">
+    <header class="ats-header">
+      <div class="logo">Dropr ATS</div>
+      <div class="job-title-header">Full-Stack Engineer — Remote</div>
+    </header>
+
+    <main class="form-wrapper">
+      <div class="tab-bar">
+        <button class="tab active" data-tab="contact" type="button">Contact</button>
+        <button class="tab" data-tab="work" type="button">Work</button>
+        <button class="tab" data-tab="uploads" type="button">Uploads</button>
+        <button class="tab" data-tab="final" type="button">Final</button>
+      </div>
+
+      <form id="dropr-form" novalidate>
+        <!-- CONTACT -->
+        <section class="form-pane active" id="pane-contact">
+          <h2>Contact</h2>
+          <p class="helper">Tabbed form + custom dropdown + repeatable experience section (different from Acme/Globex).</p>
+
+          <div class="grid-2">
+            <div class="form-group" id="g-first">
+              <label for="d-first">First Name <span class="required">*</span></label>
+              <input type="text" id="d-first" name="firstName" />
+              <span class="error-message" data-for="d-first"></span>
+            </div>
+
+            <div class="form-group" id="g-last">
+              <label for="d-last">Last Name <span class="required">*</span></label>
+              <input type="text" id="d-last" name="lastName" />
+              <span class="error-message" data-for="d-last"></span>
+            </div>
+          </div>
+
+          <div class="form-group" id="g-email">
+            <label for="d-email">Email <span class="required">*</span></label>
+            <input type="email" id="d-email" name="email" />
+            <span class="error-message" data-for="d-email"></span>
+          </div>
+
+          <div class="form-group" id="g-phone">
+            <label for="d-phone">Phone <span class="required">*</span></label>
+            <input type="tel" id="d-phone" name="phone" />
+            <span class="error-message" data-for="d-phone"></span>
+          </div>
+
+          <div class="form-group" id="g-location">
+            <label for="d-location">Location <span class="required">*</span></label>
+            <input type="text" id="d-location" name="location" />
+            <span class="error-message" data-for="d-location"></span>
+          </div>
+
+          <div class="form-actions">
+            <button class="btn btn-primary" type="button" id="next-to-work">Next</button>
+          </div>
+        </section>
+
+        <!-- WORK -->
+        <section class="form-pane" id="pane-work">
+          <h2>Work</h2>
+
+          <div class="form-group" id="g-exp">
+            <label>Experience Level <span class="required">*</span></label>
+            <div class="listbox" id="d-exp-listbox">
+              <button class="listbox-btn" id="d-exp-btn" type="button" aria-haspopup="listbox" aria-expanded="false">
+                <span id="d-exp-label">Select experience…</span>
+                <span>▾</span>
+              </button>
+              <div class="listbox-menu" id="d-exp-menu" role="listbox">
+                <div class="option" data-value="intern">0–1 years (Intern / New Grad)</div>
+                <div class="option" data-value="junior">1–3 years</div>
+                <div class="option" data-value="mid">3–5 years</div>
+                <div class="option" data-value="senior">5–10 years</div>
+                <div class="option" data-value="staff">10+ years</div>
+              </div>
+              <input type="hidden" id="d-exp" name="experience" />
+            </div>
+            <span class="error-message" data-for="d-exp"></span>
+          </div>
+
+          <div class="form-group" id="g-exps">
+            <label>Experience Entries <span class="required">*</span></label>
+            <div id="exp-container"></div>
+            <button class="add-exp" id="add-exp" type="button">+ Add another experience</button>
+            <span class="error-message" data-for="exp-container"></span>
+          </div>
+
+          <div class="grid-2">
+            <div class="form-group" id="g-start">
+              <label for="d-start-date">Earliest Start Date <span class="required">*</span></label>
+              <input type="date" id="d-start-date" name="startDate" />
+              <span class="error-message" data-for="d-start-date"></span>
+            </div>
+
+            <div class="form-group" id="g-salary">
+              <label for="d-salary">Desired Salary (USD)</label>
+              <input type="text" id="d-salary" name="salary" placeholder="e.g. 85000" />
+            </div>
+          </div>
+
+          <div class="form-group" id="g-note">
+            <label for="d-note">Short Note <span class="required">*</span></label>
+            <textarea id="d-note" name="note" maxlength="1200" placeholder="Why Dropr?"></textarea>
+            <span class="error-message" data-for="d-note"></span>
+          </div>
+
+          <div class="form-actions">
+            <button class="btn btn-secondary" type="button" id="back-to-contact">Back</button>
+            <button class="btn btn-primary" type="button" id="next-to-uploads">Next</button>
+          </div>
+        </section>
+
+        <!-- UPLOADS -->
+        <section class="form-pane" id="pane-uploads">
+          <h2>Uploads</h2>
+
+          <div class="form-group" id="g-resume">
+            <label>Resume <span class="required">*</span></label>
+            <div class="upload-area" id="d-resume-area">
+              <input type="file" id="d-resume" name="resume" accept=".pdf,.doc,.docx" />
+              Drop your resume here or <strong>click to upload</strong>
+              <div class="file-name" id="d-resume-name"></div>
+            </div>
+            <span class="error-message" data-for="d-resume"></span>
+          </div>
+
+          <div class="form-group" id="g-coverfile">
+            <label>Cover Letter File <span class="required">*</span></label>
+            <div class="upload-area" id="d-cover-area">
+              <input type="file" id="d-cover" name="coverFile" accept=".pdf,.doc,.docx" />
+              Upload a cover letter file or <strong>click to browse</strong>
+              <div class="file-name" id="d-cover-name"></div>
+            </div>
+            <span class="error-message" data-for="d-cover"></span>
+          </div>
+
+          <div class="form-actions">
+            <button class="btn btn-secondary" type="button" id="back-to-work">Back</button>
+            <button class="btn btn-primary" type="button" id="next-to-final">Next</button>
+          </div>
+        </section>
+
+        <!-- FINAL -->
+        <section class="form-pane" id="pane-final">
+          <h2>Final</h2>
+
+          <div class="form-group" id="g-consent">
+            <label>
+              <input type="checkbox" id="d-consent" />
+              I certify the information is accurate and consent to Dropr processing my application. <span class="required">*</span>
+            </label>
+            <span class="error-message" data-for="d-consent"></span>
+          </div>
+
+          <div class="form-actions">
+            <button class="btn btn-secondary" type="button" id="back-to-uploads">Back</button>
+            <button class="btn btn-submit" type="button" id="dropr-submit">Submit Application</button>
+          </div>
+        </section>
+      </form>
+
+      <!-- Success -->
+      <section class="success-page" id="dropr-success">
+        <div class="success-content">
+          <div class="success-icon">&#10003;</div>
+          <h2>Application Received</h2>
+          <p>Thanks for applying to Dropr.</p>
+          <p class="confirmation-id">Reference: <span id="dropr-ref"></span></p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="ats-footer">
+      <p>Powered by MockATS &mdash; Tsenta Take-Home Assessment</p>
+    </footer>
+  </div>
+
+  <script>
+    // Tabs
+    const tabs = Array.from(document.querySelectorAll(".tab"));
+    const panes = {
+      contact: document.getElementById("pane-contact"),
+      work: document.getElementById("pane-work"),
+      uploads: document.getElementById("pane-uploads"),
+      final: document.getElementById("pane-final"),
+    };
+
+    function openTab(name) {
+      tabs.forEach(t => t.classList.toggle("active", t.dataset.tab === name));
+      Object.entries(panes).forEach(([k, el]) => el.classList.toggle("active", k === name));
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    tabs.forEach(t => t.addEventListener("click", () => openTab(t.dataset.tab)));
+
+    // Next/Back buttons (for nicer UX)
+    document.getElementById("next-to-work").addEventListener("click", () => { if (validateContact()) openTab("work"); });
+    document.getElementById("back-to-contact").addEventListener("click", () => openTab("contact"));
+    document.getElementById("next-to-uploads").addEventListener("click", () => { if (validateWork()) openTab("uploads"); });
+    document.getElementById("back-to-work").addEventListener("click", () => openTab("work"));
+    document.getElementById("next-to-final").addEventListener("click", () => { if (validateUploads()) openTab("final"); });
+    document.getElementById("back-to-uploads").addEventListener("click", () => openTab("uploads"));
+
+    // Custom dropdown (experience)
+    const lb = document.getElementById("d-exp-listbox");
+    const lbBtn = document.getElementById("d-exp-btn");
+    const lbMenu = document.getElementById("d-exp-menu");
+    const lbLabel = document.getElementById("d-exp-label");
+    const lbHidden = document.getElementById("d-exp");
+
+    function closeListbox() {
+      lb.classList.remove("open");
+      lbBtn.setAttribute("aria-expanded", "false");
+    }
+
+    lbBtn.addEventListener("click", () => {
+      const open = lb.classList.toggle("open");
+      lbBtn.setAttribute("aria-expanded", open ? "true" : "false");
+    });
+
+    lbMenu.querySelectorAll(".option").forEach(opt => {
+      opt.addEventListener("click", () => {
+        lbHidden.value = opt.dataset.value;
+        lbLabel.textContent = opt.textContent;
+        closeListbox();
+        clearError("g-exp", "d-exp");
+      });
+    });
+
+    document.addEventListener("click", (e) => {
+      if (!lb.contains(e.target)) closeListbox();
+    });
+
+    // Repeatable experience cards
+    const expContainer = document.getElementById("exp-container");
+    const addExpBtn = document.getElementById("add-exp");
+    let expCount = 0;
+
+    function addExperience() {
+      expCount += 1;
+
+      const wrap = document.createElement("div");
+      wrap.className = "exp-card";
+
+      wrap.innerHTML = `
+        <div class="exp-head">
+          <div class="exp-title">Experience #${expCount}</div>
+          <button class="exp-remove" type="button">Remove</button>
+        </div>
+        <div class="grid-2">
+          <div class="form-group exp-title-group">
+            <label>Role Title <span class="required">*</span></label>
+            <input type="text" class="d-exp-title" placeholder="e.g. Frontend Intern" />
+            <span class="error-message"></span>
+          </div>
+          <div class="form-group exp-company-group">
+            <label>Company <span class="required">*</span></label>
+            <input type="text" class="d-exp-company" placeholder="e.g. Startup Inc" />
+            <span class="error-message"></span>
+          </div>
+        </div>
+      `;
+
+      wrap.querySelector(".exp-remove").addEventListener("click", () => {
+        wrap.remove();
+      });
+
+      expContainer.appendChild(wrap);
+      clearError("g-exps", "exp-container");
+    }
+
+    addExperience();
+    addExpBtn.addEventListener("click", addExperience);
+
+    // Upload file names
+    document.getElementById("d-resume").addEventListener("change", function () {
+      const name = this.files[0] ? this.files[0].name : "";
+      document.getElementById("d-resume-name").textContent = name;
+      document.getElementById("d-resume-area").classList.toggle("has-file", !!name);
+      if (name) clearError("g-resume", "d-resume");
+    });
+
+    document.getElementById("d-cover").addEventListener("change", function () {
+      const name = this.files[0] ? this.files[0].name : "";
+      document.getElementById("d-cover-name").textContent = name;
+      document.getElementById("d-cover-area").classList.toggle("has-file", !!name);
+      if (name) clearError("g-coverfile", "d-cover");
+    });
+
+    // Errors helpers
+    function setError(groupId, forKey, msg) {
+      const group = document.getElementById(groupId);
+      group.classList.add("has-error");
+      const el = group.querySelector(`[data-for="${forKey}"]`);
+      if (el) el.textContent = msg;
+    }
+
+    function clearError(groupId, forKey) {
+      const group = document.getElementById(groupId);
+      group.classList.remove("has-error");
+      const el = group.querySelector(`[data-for="${forKey}"]`);
+      if (el) el.textContent = "";
+    }
+
+    // Validation per pane
+    function validateContact() {
+      let ok = true;
+
+      const first = document.getElementById("d-first");
+      const last = document.getElementById("d-last");
+      const email = document.getElementById("d-email");
+      const phone = document.getElementById("d-phone");
+      const location = document.getElementById("d-location");
+
+      if (!first.value.trim()) { setError("g-first", "d-first", "Required"); ok = false; } else clearError("g-first", "d-first");
+      if (!last.value.trim())  { setError("g-last", "d-last", "Required"); ok = false; } else clearError("g-last", "d-last");
+
+      const emailOk = (email.value || "").match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/);
+      if (!email.value.trim() || !emailOk) { setError("g-email", "d-email", "Enter a valid email"); ok = false; } else clearError("g-email", "d-email");
+
+      if (!phone.value.trim()) { setError("g-phone", "d-phone", "Required"); ok = false; } else clearError("g-phone", "d-phone");
+      if (!location.value.trim()) { setError("g-location", "d-location", "Required"); ok = false; } else clearError("g-location", "d-location");
+
+      if (!ok) openTab("contact");
+      return ok;
+    }
+
+    function validateWork() {
+      let ok = true;
+
+      if (!lbHidden.value) { setError("g-exp", "d-exp", "Select an option"); ok = false; } else clearError("g-exp", "d-exp");
+
+      const cards = Array.from(expContainer.querySelectorAll(".exp-card"));
+      if (cards.length === 0) {
+        setError("g-exps", "exp-container", "Add at least one experience");
+        ok = false;
+      } else {
+        clearError("g-exps", "exp-container");
+        cards.forEach(card => {
+          const title = card.querySelector(".d-exp-title");
+          const company = card.querySelector(".d-exp-company");
+          const titleGroup = card.querySelector(".exp-title-group");
+          const compGroup = card.querySelector(".exp-company-group");
+
+          if (!title.value.trim()) { titleGroup.classList.add("has-error"); ok = false; } else titleGroup.classList.remove("has-error");
+          if (!company.value.trim()) { compGroup.classList.add("has-error"); ok = false; } else compGroup.classList.remove("has-error");
+        });
+      }
+
+      const start = document.getElementById("d-start-date");
+      const note = document.getElementById("d-note");
+      if (!start.value) { setError("g-start", "d-start-date", "Required"); ok = false; } else clearError("g-start", "d-start-date");
+      if (!note.value.trim()) { setError("g-note", "d-note", "Required"); ok = false; } else clearError("g-note", "d-note");
+
+      if (!ok) openTab("work");
+      return ok;
+    }
+
+    function validateUploads() {
+      let ok = true;
+
+      const resume = document.getElementById("d-resume");
+      const cover = document.getElementById("d-cover");
+
+      if (!resume.files || resume.files.length === 0) { setError("g-resume", "d-resume", "Upload resume"); ok = false; } else clearError("g-resume", "d-resume");
+      if (!cover.files || cover.files.length === 0) { setError("g-coverfile", "d-cover", "Upload cover letter file"); ok = false; } else clearError("g-coverfile", "d-cover");
+
+      if (!ok) openTab("uploads");
+      return ok;
+    }
+
+    function validateFinal() {
+      let ok = true;
+      const consent = document.getElementById("d-consent");
+      if (!consent.checked) { setError("g-consent", "d-consent", "You must agree"); ok = false; } else clearError("g-consent", "d-consent");
+      if (!ok) openTab("final");
+      return ok;
+    }
+
+    function genRef() {
+      return "DR-" + Date.now().toString(36).toUpperCase() + "-" + Math.random().toString(36).slice(2, 5).toUpperCase();
+    }
+
+    // Submit
+    document.getElementById("dropr-submit").addEventListener("click", () => {
+      const ok = validateContact() && validateWork() && validateUploads() && validateFinal();
+      if (!ok) return;
+
+      const btn = document.getElementById("dropr-submit");
+      btn.disabled = true;
+      btn.textContent = "Submitting...";
+
+      setTimeout(() => {
+        document.getElementById("dropr-ref").textContent = genRef();
+        document.getElementById("dropr-form").style.display = "none";
+        document.getElementById("dropr-success").classList.add("active");
+      }, 1100);
+    });
+  </script>
+</body>
+</html>

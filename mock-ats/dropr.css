@@ -1,0 +1,429 @@
+/* =========================================
+   Dropr ATS - Tabbed Application Form Styles
+   Inspired by MockATS styles.css
+   ========================================= */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
+    Arial, sans-serif;
+  background: #f5f5f7;
+  color: #1d1d1f;
+  line-height: 1.6;
+}
+
+/* Layout */
+.app-container {
+  max-width: 860px;
+  margin: 0 auto;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header */
+.ats-header {
+  background: #0f172a;
+  color: white;
+  padding: 24px 32px;
+  text-align: center;
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.job-title-header {
+  font-size: 14px;
+  opacity: 0.85;
+  margin-top: 4px;
+}
+
+/* Tabs */
+.tab-bar {
+  display: flex;
+  gap: 8px;
+  padding: 16px;
+  background: white;
+  border-bottom: 1px solid #e5e5e5;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.tab {
+  border: 1.5px solid #d1d1d6;
+  background: white;
+  color: #666;
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.tab:hover {
+  border-color: #0f172a;
+  background: #f8f8ff;
+}
+
+.tab.active {
+  border-color: #0f172a;
+  background: #f0f0ff;
+  color: #0f172a;
+}
+
+/* Form wrapper */
+.form-wrapper {
+  flex: 1;
+  background: white;
+}
+
+.form-pane {
+  display: none;
+  padding: 32px;
+  animation: fadeIn 0.25s ease;
+}
+
+.form-pane.active {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+h2 {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 18px;
+  color: #0f172a;
+}
+
+.helper {
+  font-size: 13px;
+  color: #666;
+  margin-bottom: 18px;
+}
+
+/* Grid */
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+@media (max-width: 640px) {
+  .grid-2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Fields */
+.form-group {
+  margin-bottom: 18px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 6px;
+  color: #333;
+}
+
+.required {
+  color: #ff3b30;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="url"],
+input[type="date"],
+textarea {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1.5px solid #d1d1d6;
+  border-radius: 8px;
+  font-size: 15px;
+  font-family: inherit;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  background: white;
+}
+
+input:focus,
+textarea:focus {
+  outline: none;
+  border-color: #0f172a;
+  box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.10);
+}
+
+textarea {
+  resize: vertical;
+  min-height: 110px;
+}
+
+/* Custom dropdown (listbox) */
+.listbox {
+  position: relative;
+}
+
+.listbox-btn {
+  width: 100%;
+  text-align: left;
+  padding: 10px 14px;
+  border: 1.5px solid #d1d1d6;
+  border-radius: 8px;
+  background: white;
+  cursor: pointer;
+  font-size: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.listbox-btn:hover {
+  border-color: #0f172a;
+  background: #f8f8ff;
+}
+
+.listbox-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1.5px solid #d1d1d6;
+  border-radius: 8px;
+  overflow: hidden;
+  display: none;
+  z-index: 50;
+  box-shadow: 0 8px 18px rgba(0,0,0,0.10);
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+.listbox.open .listbox-menu {
+  display: block;
+}
+
+.option {
+  padding: 10px 14px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.15s;
+}
+
+.option:hover {
+  background: #f0f0ff;
+}
+
+/* Repeatable experience cards */
+.exp-card {
+  border: 1.5px solid #d1d1d6;
+  border-radius: 10px;
+  padding: 14px;
+  background: #f8f8fa;
+  margin-bottom: 12px;
+}
+
+.exp-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.exp-title {
+  font-weight: 700;
+  color: #0f172a;
+  font-size: 14px;
+}
+
+.exp-remove {
+  border: 1px solid #ff3b30;
+  background: white;
+  color: #ff3b30;
+  border-radius: 999px;
+  padding: 6px 10px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.exp-remove:hover {
+  background: #fff5f5;
+}
+
+.add-exp {
+  border: 1.5px solid #0f172a;
+  background: #0f172a;
+  color: white;
+  padding: 10px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.add-exp:hover {
+  opacity: 0.92;
+}
+
+/* Upload area */
+.upload-area {
+  position: relative;
+  border: 2px dashed #d1d1d6;
+  border-radius: 8px;
+  padding: 18px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.upload-area:hover {
+  border-color: #0f172a;
+  background: #f8f8ff;
+}
+
+.upload-area.has-file {
+  border-color: #34c759;
+  background: #f0fdf4;
+}
+
+.upload-area input[type="file"] {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.file-name {
+  margin-top: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+/* Errors */
+.has-error input,
+.has-error textarea,
+.has-error .listbox-btn,
+.has-error .upload-area {
+  border-color: #ff3b30 !important;
+}
+
+.error-message {
+  display: block;
+  font-size: 13px;
+  color: #ff3b30;
+  margin-top: 4px;
+  min-height: 18px;
+}
+
+/* Actions */
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 26px;
+  padding-top: 20px;
+  border-top: 1px solid #e5e5e5;
+}
+
+.btn {
+  padding: 10px 28px;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-secondary {
+  background: #e5e5e5;
+  color: #333;
+}
+
+.btn-secondary:hover {
+  background: #d5d5d5;
+}
+
+.btn-primary {
+  background: #0f172a;
+  color: white;
+}
+
+.btn-primary:hover {
+  background: #1f2a44;
+}
+
+.btn-submit {
+  background: #34c759;
+  color: white;
+  padding: 12px 36px;
+  font-size: 16px;
+}
+
+.btn-submit:hover {
+  background: #2db84d;
+}
+
+.btn-submit:disabled {
+  background: #999;
+  cursor: not-allowed;
+}
+
+/* Confirmation */
+.success-page {
+  display: none;
+  padding: 64px 32px;
+  text-align: center;
+}
+
+.success-page.active {
+  display: block;
+}
+
+.success-icon {
+  width: 72px;
+  height: 72px;
+  background: #34c759;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36px;
+  margin: 0 auto 24px;
+}
+
+.confirmation-id {
+  margin-top: 22px;
+  padding: 12px;
+  background: #f0f0ff;
+  border-radius: 8px;
+  font-family: "SF Mono", Monaco, monospace;
+  font-size: 14px;
+}
+
+/* Footer */
+.ats-footer {
+  padding: 16px;
+  text-align: center;
+  font-size: 12px;
+  color: #999;
+  border-top: 1px solid #e5e5e5;
+  background: white;
+}
